@@ -1,0 +1,60 @@
+Question 6) Write a program to implement Dijkstra's shortest path algorithm.
+
+Answer 6)
+
+#include <iostream>
+#include <vector>
+#include <limits>
+using namespace std;
+
+int minDistance(vector<int> &dist, vector<bool> &visited, int n) {
+    int minVal = numeric_limits<int>::max(), minIndex = -1;
+    for (int i = 0; i < n; i++) {
+        if (!visited[i] && dist[i] <= minVal) {
+            minVal = dist[i];
+            minIndex = i;
+        }
+    }
+    return minIndex;
+}
+
+void dijkstra(vector<vector<int>> &graph, int src, int n) {
+    vector<int> dist(n, numeric_limits<int>::max());
+    vector<bool> visited(n, false);
+
+    dist[src] = 0;
+
+    for (int i = 0; i < n - 1; i++) {
+        int u = minDistance(dist, visited, n);
+        visited[u] = true;
+
+        for (int v = 0; v < n; v++) {
+            if (!visited[v] && graph[u][v] && dist[u] != numeric_limits<int>::max()
+                && dist[u] + graph[u][v] < dist[v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+
+    cout << "Vertex \t Distance from Source\n";
+    for (int i = 0; i < n; i++) {
+        cout << i << " \t " << dist[i] << endl;
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<vector<int>> graph(n, vector<int>(n));
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> graph[i][j];
+
+    int src;
+    cin >> src;
+
+    dijkstra(graph, src, n);
+
+    return 0;
+}

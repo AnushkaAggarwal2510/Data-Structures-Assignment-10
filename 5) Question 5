@@ -1,0 +1,49 @@
+Question 5) Write a program to implement prim's minimum spanning tree algorithm. 
+
+Answer 5)
+
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+int minKey(vector<int>& key, vector<bool>& mstSet, int n) {
+    int minVal = INT_MAX, minIndex;
+    for (int v = 0; v < n; v++)
+        if (!mstSet[v] && key[v] < minVal)
+            minVal = key[v], minIndex = v;
+    return minIndex;
+}
+
+void primMST(vector<vector<int>>& graph, int n) {
+    vector<int> parent(n);
+    vector<int> key(n, INT_MAX);
+    vector<bool> mstSet(n, false);
+
+    key[0] = 0;
+    parent[0] = -1;
+
+    for (int count = 0; count < n - 1; count++) {
+        int u = minKey(key, mstSet, n);
+        mstSet[u] = true;
+
+        for (int v = 0; v < n; v++)
+            if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v])
+                parent[v] = u, key[v] = graph[u][v];
+    }
+
+    for (int i = 1; i < n; i++)
+        cout << parent[i] << " - " << i << "  Weight: " << graph[i][parent[i]] << endl;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<vector<int>> graph(n, vector<int>(n));
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            cin >> graph[i][j];
+
+    primMST(graph, n);
+}

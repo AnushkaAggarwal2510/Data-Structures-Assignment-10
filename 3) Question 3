@@ -1,0 +1,66 @@
+Question 3) Write a program to implement depth first search algorithm.
+
+Answer 3)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Graph {
+private:
+    int n;
+    vector<vector<int>> adj;
+    vector<int> visited;
+
+public:
+    Graph(int vertices) {
+        n = vertices;
+        adj.resize(n);
+        visited.resize(n, 0);
+    }
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+        adj[v].push_back(u);  
+    }
+    void DFSUtil(int node) {
+        visited[node] = 1;
+        cout << node << " ";
+
+        for (int neigh : adj[node]) {
+            if (!visited[neigh]) {
+                DFSUtil(neigh);
+            }
+        }
+    }
+    void DFS(int start) {
+        fill(visited.begin(), visited.end(), 0);
+        cout << "DFS Traversal starting from " << start << ": ";
+        DFSUtil(start);
+        cout << endl;
+    }
+};
+int main() {
+    int n, edges, u, v;
+
+    cout << "Enter number of vertices: ";
+    cin >> n;
+
+    Graph g(n);
+
+    cout << "Enter number of edges: ";
+    cin >> edges;
+
+    cout << "Enter edges (u v):\n";
+    for (int i = 0; i < edges; i++) {
+        cin >> u >> v;
+        g.addEdge(u, v);
+    }
+
+    int start;
+    cout << "Enter starting vertex for DFS: ";
+    cin >> start;
+
+    g.DFS(start);
+
+    return 0;
+}
